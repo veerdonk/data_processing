@@ -1,0 +1,21 @@
+#configfile
+## Input files - change or add .pep files to be analyzed
+samples:
+  cau : data/fastas/cau.pep
+  gga : data/fastas/gga.pep
+  aan : data/fastas/aan.pep
+
+## Directories
+# working directory - change to preferred directory
+workingdir : /home/dylan/Documents/david/dataProcessing/
+
+#data directories - change if you know what you're doing
+orthomcl : results/orthomcl/
+fastaDir : data/fastas/
+adjustedDir : data/adjusted/
+filterDir : data/filtered/
+dbDir : data/blastdb/
+checkpoints : tmp/checks/
+
+
+

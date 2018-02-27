@@ -1,0 +1,120 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	3	adjustFasta
+	1	all
+	1	clearDb
+	1	createBlastDb
+	1	filterFasta
+	1	findPairs
+	1	getPairsFiles
+	1	loadBlast
+	1	parseBlast
+	1	runBlast
+	12
+
+rule adjustFasta:
+    input: data/fastas/cau.pep
+    output: data/adjusted/cau.fasta
+    jobid: 9
+    wildcards: sample=cau
+
+Finished job 9.
+1 of 12 steps (8%) done
+
+rule adjustFasta:
+    input: data/fastas/aan.pep
+    output: data/adjusted/aan.fasta
+    jobid: 10
+    wildcards: sample=aan
+
+Finished job 10.
+2 of 12 steps (17%) done
+
+rule adjustFasta:
+    input: data/fastas/gga.pep
+    output: data/adjusted/gga.fasta
+    jobid: 11
+    wildcards: sample=gga
+
+Finished job 11.
+3 of 12 steps (25%) done
+
+rule filterFasta:
+    input: data/adjusted/aan.fasta, data/adjusted/cau.fasta, data/adjusted/gga.fasta
+    output: data/filtered/goodProteins.fasta
+    jobid: 8
+
+Finished job 8.
+4 of 12 steps (33%) done
+
+rule createBlastDb:
+    input: data/filtered/goodProteins.fasta
+    output: data/blastdb/goodProteinsdb.phr, data/blastdb/goodProteinsdb.pin, data/blastdb/goodProteinsdb.psq
+    jobid: 7
+
+Finished job 7.
+5 of 12 steps (42%) done
+
+rule runBlast:
+    input: data/blastdb/goodProteinsdb.phr, data/blastdb/goodProteinsdb.pin, data/blastdb/goodProteinsdb.psq
+    output: data/blastdb/blastout.tsv
+    jobid: 6
+
+Finished job 6.
+6 of 12 steps (50%) done
+
+rule parseBlast:
+    input: data/blastdb/blastout.tsv
+    output: results/orthomcl/similarSequences.txt
+    jobid: 5
+
+Finished job 5.
+7 of 12 steps (58%) done
+
+rule clearDb:
+    input: results/orthomcl/similarSequences.txt
+    output: tmp/checks/clear.done
+    jobid: 4
+
+Touching output file tmp/checks/clear.done.
+Finished job 4.
+8 of 12 steps (67%) done
+
+rule loadBlast:
+    input: tmp/checks/clear.done
+    output: tmp/checks/load.done
+    jobid: 3
+
+Touching output file tmp/checks/load.done.
+Finished job 3.
+9 of 12 steps (75%) done
+
+rule findPairs:
+    input: tmp/checks/load.done
+    output: tmp/checks/pairs.log
+    jobid: 2
+
+Finished job 2.
+10 of 12 steps (83%) done
+
+rule getPairsFiles:
+    input: tmp/checks/pairs.log
+    output: tmp/checks/dump.done
+    jobid: 1
+
+Touching output file tmp/checks/dump.done.
+Finished job 1.
+11 of 12 steps (92%) done
+
+localrule all:
+    input: tmp/checks/dump.done
+    jobid: 0
+
+Finished job 0.
+12 of 12 steps (100%) done
+Shutting down, this might take some time.
+Complete log: /home/dylan/Documents/david/dataProcessing/.snakemake/log/2018-02-26T164409.978809.snakemake.log
